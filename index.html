@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Weather</title>
+
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12"></script>
+	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+	<style>
+		table {
+			margin: auto;
+			border: 2px solid black;
+			border-radius: 3px;
+			border-spacing: 5px;
+			padding: 5px;
+			text-align: center;
+			position: relative;
+			border-collapse: collapse;
+		}
+
+		th, td {
+			min-width: 30px;
+			padding: 10px;
+			border: 1px solid black;
+		}
+
+		.b20 { /* button */
+			cursor: pointer;
+			width: 35px;
+			margin: 10px calc(50% - 15px);
+			text-align: center;
+		}
+		.items {
+			padding: 5px; 
+			background: #ccc; 
+			border-radius: 4px; 
+			cursor: pointer; 
+			width: 260px; 
+			text-align: center; 
+			margin-left: 40%;
+		}
+
+		form {
+			margin: 20px; 
+			text-align: center; 
+			position: relative;
+		}
+	</style>
+</head>
+
+
+<body>
+	<div id='app'>
+		<div>
+			<form v-on:keydown.enter.prevent=""> <!-- preventing key enter -->
+				Enter city and select from the list:
+				<input type="text" name="search" v-model="search" placeholder="type city...">
+				<input type="submit" value="Clear table">
+			</form>
+
+			<div>
+				<p v-for="item in matches" v-on:click="fAddNewRow(item)" class="items">
+					{{item.name}} / {{item.country}}
+				</p>
+			</div>
+		</div> 
+
+		<table>
+			<thead>
+				<tr style="background-color: #d7dae7"> 
+					<th>№</th>
+					<th>City</th>
+					<th> Coordinates </th>
+					<th> Temperature K</th>
+					<th> Temperature C</th>
+					<th>Humidity</th>
+					<th title="delete row">Х</th>
+				</tr>
+			</thead>
+			<tbody>
+
+				<tr v-for="(tbData, index) in tbDatas"> <!-- loop through the lines -->
+					<td style="text-align:center"><b>{{index + 1}}</b></td> <!-- index -->
+					<td class="th60">{{tbData.name}}</td> <!-- city -->
+					<td class="th60">latitude: {{ tbData.coord.lat }}, longitude: {{ tbData.coord.lon }}</td> <!-- coord -->
+					<td class="th60">{{ Math.round(tbData.main.temp) }}°K</td> <!-- tempK -->
+					<td class="th60">{{ Math.round(tbData.main.temp - 273) }}°C</td> <!-- tempC -->
+					<td class="th60">{{ tbData.main.humidity }}%</td> <!-- humidity -->
+					<td><button class="b20" v-if="tbDatas.length > 0" v-on:click="fDeleteRow(index)" title="delete row">-</button></td> <!-- Delete row, if index > 0 -->
+				</tr>
+			</tbody>	
+		</table>
+	</div>
+	
+	<script src='app.js'></script>
+</body>
+</html>
